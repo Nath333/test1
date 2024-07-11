@@ -4,21 +4,21 @@ import xml.etree.ElementTree as ET
 
 app = Flask(__name__)
 
-@app.route('/get_xml')
+@app.route('/')  # Changed from '/get_xml' to '/'
 def get_xml():
-    # Faire une requête à l'API
+    # Make a request to the API
     response = requests.get("https://api.sunrise-sunset.org/json?lat=36.7201600&lng=-4.4203400")
     data = response.json()
 
-    # Créer un élément racine pour le XML
+    # Create a root XML element
     root = ET.Element("SunriseSunset")
 
-    # Ajouter les données de l'API sous forme d'éléments XML
+    # Add API data as XML elements
     for key, value in data['results'].items():
         child = ET.SubElement(root, key)
         child.text = value
 
-    # Convertir l'arbre XML en une chaîne
+    # Convert the XML tree to a string
     xml_str = ET.tostring(root, encoding='utf8', method='xml')
     return Response(xml_str, mimetype='text/xml')
 
